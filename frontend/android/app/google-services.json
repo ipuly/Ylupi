@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "638475175038",
+    "project_id": "learnfirebase-76a04",
+    "storage_bucket": "learnfirebase-76a04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638475175038:android:7fb31d8d889ded552c042f",
+        "android_client_info": {
+          "package_name": "com.example.ylupi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638475175038-u3kjfecnk518b3u0ic67dtnno7fuok1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu7qVBKNmksyFhYc2t9ERp4JnbcNe1hdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638475175038-u3kjfecnk518b3u0ic67dtnno7fuok1i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638475175038-hoelhuuc2cpn3dvvh2h5juh5ejb3bjcp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ylupi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
