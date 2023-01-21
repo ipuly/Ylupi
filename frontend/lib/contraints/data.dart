@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ylupi/screens/main_screens/networking_screen.dart';
+import 'package:ylupi/screens/networking_https/crud_api_1/stream_auto_refresh_rafi.dart';
 import 'package:ylupi/screens/networking_https/crud_api_2/read_data.dart';
 import 'package:ylupi/screens/main_screens/state_management_screen.dart';
 import 'package:ylupi/screens/networking_https/crud_api_1/networking_api_local.dart';
@@ -35,6 +36,11 @@ class dataMenu {
       "judul_item": "CRUD Local API Simple",
       "warna_item": Colors.blueAccent,
       "link_item": NetworkingApiLocal(),
+    },
+    {
+      "judul_item": "Stream Auto Refresh Rafi",
+      "warna_item": Colors.redAccent,
+      "link_item": StreamLocalRefreshRafi(),
     },
     {
       "judul_item": "CRUD Local API",

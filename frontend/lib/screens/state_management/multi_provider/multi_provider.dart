@@ -40,7 +40,7 @@ class _MultiProviderExampleState extends State<MultiProviderExample> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            toolbarHeight: 100,
+            // toolbarHeight: 100,
             // centerTitle: true,
             title: Consumer<ColorState>(
               builder: (context, colorstate, child) => Column(

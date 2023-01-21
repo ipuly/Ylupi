@@ -63,20 +63,6 @@ class _NetworkingApiLocalState extends State<NetworkingApiLocal> {
   final emailController = TextEditingController();
   final genderController = TextEditingController();
 
-  bool _isLoading = false;
-
-  Future<void> _handleRefresh() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,152 +71,174 @@ class _NetworkingApiLocalState extends State<NetworkingApiLocal> {
       ),
       body: Container(
         padding: const EdgeInsets.all(10.0),
-        child: RefreshIndicator(
-          onRefresh: _handleRefresh,
-          child: FutureBuilder(
-            future: getData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<dynamic> decoded = jsonDecode(snapshot.data!.body);
-                return ListView.builder(
-                  itemCount: decoded.length,
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text(decoded[index]["name"][0]),
-                        ),
-                        title: Text(decoded[index]["name"]),
-                        subtitle: Text(
-                            "${decoded[index]["gender"]} , ${decoded[index]["email"]}"),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                final _formKey = GlobalKey<FormState>();
-                                nameController.text = decoded[index]["name"];
-                                emailController.text = decoded[index]["email"];
-                                genderController.text =
-                                    decoded[index]["gender"];
-                                showDialog(
-                                    context: context,
-                                    builder: (builder) {
-                                      return AlertDialog(
-                                        title: Text("Edit User"),
-                                        content: Form(
-                                          key: _formKey,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              TextFormField(
-                                                controller: nameController,
-                                                decoration: InputDecoration(
-                                                  hintText: "Name",
-                                                  labelText: "Name",
-                                                ),
-                                              ),
-                                              TextFormField(
-                                                controller: emailController,
-                                                decoration: InputDecoration(
-                                                  hintText: "Email",
-                                                  labelText: "Email",
-                                                ),
-                                              ),
-                                              DropdownSearch<String>(
-                                                popupProps: PopupProps.dialog(
-                                                  fit: FlexFit.loose,
-                                                  showSelectedItems: true,
-                                                  searchFieldProps:
-                                                      TextFieldProps(
-                                                    controller:
-                                                        genderController,
-                                                  ),
-                                                ),
-                                                items: ["Male", "Female"],
-                                                dropdownDecoratorProps:
-                                                    DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    labelText: "Gender",
-                                                    hintText:
-                                                        "country in menu mode",
-                                                  ),
-                                                ),
-                                                selectedItem:
-                                                    "${genderController.text}",
-                                              ),
-                                              const SizedBox(
-                                                height: 20.0,
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () async {
-                                                  await updateData(
-                                                      decoded[index]["id"], {
-                                                    "name": nameController.text,
-                                                    "email":
-                                                        emailController.text,
-                                                    "gender":
-                                                        genderController.text,
-                                                  });
-                                                  setState(
-                                                    () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  );
-                                                },
-                                                child: const Text("Update"),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                                // updateData(decoded[index]['id']);
-                                // setState(() {});
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                deleteData(decoded[index]["id"]);
-                                setState(() {});
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                              ),
-                            ),
-                          ],
-                        ),
+        child: FutureBuilder(
+          future: getData(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<dynamic> decoded = jsonDecode(snapshot.data!.body);
+              return ListView.builder(
+                itemCount: decoded.length,
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Text(decoded[index]["name"][0]),
                       ),
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    const CircularProgressIndicator(
-                      backgroundColor: Colors.yellow,
-                      color: Colors.black54,
+                      title: Text(decoded[index]["name"]),
+                      subtitle: Text(
+                          "${decoded[index]["gender"]} , ${decoded[index]["email"]}"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              final _formKey = GlobalKey<FormState>();
+                              nameController.text = decoded[index]["name"];
+                              emailController.text = decoded[index]["email"];
+                              genderController.text = decoded[index]["gender"];
+                              String gender = "";
+                              showDialog(
+                                  context: context,
+                                  builder: (builder) {
+                                    return AlertDialog(
+                                      title: Text("Edit User"),
+                                      content: Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextFormField(
+                                              controller: nameController,
+                                              decoration: InputDecoration(
+                                                hintText: "Name",
+                                                labelText: "Name",
+                                              ),
+                                            ),
+                                            TextFormField(
+                                              controller: emailController,
+                                              decoration: InputDecoration(
+                                                hintText: "Email",
+                                                labelText: "Email",
+                                              ),
+                                            ),
+                                            DropdownSearch<String>(
+                                              popupProps: PopupProps.dialog(
+                                                fit: FlexFit.loose,
+                                                showSelectedItems: true,
+                                              ),
+                                              items: ["Male", "Female"],
+                                              onChanged: (value) {
+                                                gender = value!;
+                                              },
+                                              dropdownDecoratorProps:
+                                                  DropDownDecoratorProps(
+                                                dropdownSearchDecoration:
+                                                    InputDecoration(
+                                                  labelText: "Gender",
+                                                ),
+                                              ),
+                                              selectedItem:
+                                                  genderController.text,
+                                            ),
+                                            // Column(
+                                            //   crossAxisAlignment:
+                                            //       CrossAxisAlignment.start,
+                                            //   children: [
+                                            //     RadioListTile(
+                                            //       title: Text("Laki - Laki"),
+                                            //       value: "Pria",
+                                            //       groupValue:
+                                            //           dataUser["datauser"].sex,
+                                            //       onChanged: (value) {
+                                            //         setState(() {
+                                            //           gValue = value.toString();
+                                            //           print(gValue);
+                                            //         });
+                                            //       },
+                                            //     ),
+                                            //     RadioListTile(
+                                            //       title: Text("Perempuan"),
+                                            //       value: "Wanita",
+                                            //       groupValue:
+                                            //           dataUser["datauser"].sex,
+                                            //       onChanged: (value) {
+                                            //         setState(() {
+                                            //           gValue = value.toString();
+                                            //           print(dataUser["datauser"]
+                                            //               .id
+                                            //               .toString());
+                                            //         });
+                                            //       },
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            const SizedBox(
+                                              height: 20.0,
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                print(gender);
+                                                await updateData(
+                                                    decoded[index]["id"], {
+                                                  "name": nameController.text,
+                                                  "email": emailController.text,
+                                                  "gender": gender,
+                                                });
+                                                setState(
+                                                  () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+                                              },
+                                              child: const Text("Update"),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              deleteData(decoded[index]["id"]);
+                              setState(() {});
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    const Text("Loading...")
-                  ],
-                ),
+                  );
+                },
               );
-            },
-          ),
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  const CircularProgressIndicator(
+                    backgroundColor: Colors.yellow,
+                    color: Colors.black54,
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  const Text("Loading...")
+                ],
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(

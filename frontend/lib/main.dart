@@ -4,8 +4,8 @@ import 'package:ylupi/firebase_options.dart';
 import 'package:ylupi/screens/home_screen.dart';
 
 void main() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        // primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
       home: HomeScreen(),
